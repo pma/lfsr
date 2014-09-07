@@ -1,4 +1,4 @@
-defmodule LfsrTest do
+defmodule LFSRTest do
   use ExUnit.Case
 
   test "maximum length sequence is generated" do

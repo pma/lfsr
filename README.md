@@ -33,9 +33,10 @@ Let's generate a pseudo-random sequence of numbers between 1_000_000 and 9_999_9
 We need a 24-bit LFSR, since with a 23-bit we can only produce a sequence with length 8_388_607.
 
 ```iex
-iex> Stream.iterate(LFSR.new(5_345_234, 24), &LFSR.next/1) \
+iex> LFSR.new(5_345_234, 24) \
+...> |> Stream.iterate(&LFSR.next/1) \
 ...> |> Stream.map(&LFSR.state/1) \
-...> |> Stream.filter(&(&1 >= 1_000_000 and &1 <= 9_999_999)) \
+...> |> Stream.filter(&(&1 in 1_000_000..9_999_999)) \
 ...> |> Enum.take(100)
 [5345234, 2672617, 6697466, 3348733, 6342207, 9312455, 9930289, 9683736,
  4841868, 2420934, 1210467, 5787404, 2893702, 1446851, 5816952, 2908476,
@@ -46,7 +47,36 @@ iex> Stream.iterate(LFSR.new(5_345_234, 24), &LFSR.next/1) \
  3158469, 6294641, ...]
 ```
 
+### Usage with Agents
 
+```elixir
+defmodule PRNG do
+  def start_link do
+    Agent.start_link(fn -> LFSR.new(5_345_234, 24) end, name: __MODULE__)
+  end
+
+  def next do
+    Agent.get_and_update(__MODULE__, fn lfsr ->
+      lfsr = next_valid(lfsr)
+      {lfsr.state, lfsr}
+    end)
+  end
+
+  defp next_valid(%LFSR{} = lfsr) do
+    lfsr = LFSR.next(lfsr)
+    if lfsr.state in 1_000_000..9_999_999, do: lfsr, else: next_valid(lfsr)
+  end
+end
+```
+
+```iex
+iex> PRNG.start_link
+{:ok, #PID<0.101.0>}
+iex> PRNG.next
+2672617
+iex> PRNG.next
+6697466
+```
 ## References
 
 * http://en.wikipedia.org/wiki/Maximum_length_sequence

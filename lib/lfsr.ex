@@ -11,7 +11,7 @@ defmodule LFSR do
     struct(__MODULE__, state: state, mask: mask(size, taps))
   end
 
-  def new(state, size) when is_integer(state) and size in 2..4096 do
+  def new(state, size) when is_integer(state) and is_integer(size) and size in 2..4096 do
     new(state, taps(size))
   end
 
@@ -30,8 +30,8 @@ defmodule LFSR do
   end
 
   defp set_bit(bits, pos) do
-    <<left :: size(pos), _ :: 1, right :: bitstring>> = bits
-    <<left :: size(pos), 1 :: 1, right :: bitstring>>
+    <<left::size(pos), _::1, right::bitstring>> = bits
+    <<left::size(pos), 1::1, right::bitstring>>
   end
 
   # http://www.eej.ulst.ac.uk/~ian/modules/EEE515/files/old_files/lfsr/lfsr_table.pdf

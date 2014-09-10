@@ -1,8 +1,10 @@
 defmodule LFSRTest do
   use ExUnit.Case
+  doctest LFSR
 
   test "maximum length sequence is generated" do
-    sequence = Stream.iterate(LFSR.new(1, 4), &LFSR.next/1)
+    sequence = LFSR.new(1, 4)
+    |> Stream.iterate(&LFSR.next/1)
     |> Stream.map(&LFSR.state/1)
     |> Enum.take(15)
     |> Enum.sort

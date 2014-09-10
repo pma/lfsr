@@ -4,8 +4,11 @@ defmodule LFSR.Mixfile do
   def project do
     [app: :lfsr,
      version: "0.0.1",
-     elixir: "~> 1.0.0-rc1",
-     deps: deps]
+     elixir: "~> 1.0.0",
+     description: description,
+     package: package,
+     deps: deps,
+     docs: [readme: true, main: "README"]]
   end
 
   def application do
@@ -13,6 +16,20 @@ defmodule LFSR.Mixfile do
   end
 
   defp deps do
-    []
+    [{:earmark, "~> 0.1", only: :docs},
+     {:ex_doc, "~> 0.5", only: :docs}]
+  end
+
+  defp description do
+    """
+    Elixir implementation of a binary Galois Linear Feedback Shift Register.
+    """
+  end
+
+  defp package do
+    [files: ["lib", "mix.exs", "README.md", "LICENSE"],
+     contributors: ["Paulo Almeida"],
+     licenses: ["MIT"],
+     links: %{"GitHub" => "https://github.com/pma/lfsr"}]
   end
 end

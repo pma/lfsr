@@ -1,7 +1,50 @@
 defmodule LFSR do
+  @moduledoc """
+  Implements a binary Galois Linear Feedback Shift Register with arbitrary size `n`.
+
+  A LFSR is a shift register whose input bit is a linear function of its previous state.
+
+  The bit positions that affect the next state are called the taps.
+
+  A LFSR with well chosen taps will produce a maximum cycle, meaning that a register
+  with size `n` will produce a sequence of length 2<sup>n</sup>-1 without repetitions.
+
+  The LFSR can be initialized by providing an starting state and the desired size of
+  the register. In this case, a table of default taps that generate the maximum cycle
+  is used.
+
+  Alternatively, the LFSR can be initialized with the starting state and a
+  list of taps. Note however that not all combinations of taps will produce the
+  maximum cycle.
+  """
+
   import Bitwise
 
   defstruct [:state, :mask]
+
+  @doc """
+  Initializes and returns a new LFSR. The LFSR is represented using a Struct.
+
+  The first argument is the starting state and must be a number greater than 0 and
+  less than 2<sup>n</sup>, where `n` is the size of the register.
+
+  The second argument is either the size in bits of the register or a list of taps.
+
+  ## Examples
+
+      iex> LFSR.new(1, 8)
+      %LFSR{mask: 184, state: 1}
+
+      iex> LFSR.new(1, [8, 6, 5, 4])
+      %LFSR{mask: 184, state: 1}
+  """
+  def new(state, size) when is_integer(state) and is_integer(size) and (size in 2..786 or size in [1024, 2048, 4096]) do
+    new(state, taps(size))
+  end
+
+  def new(state, size) when is_integer(state) and is_integer(size) do
+    raise ArgumentError, message: "no entry for size #{size} found in the table of maximum-cycle LFSR taps"
+  end
 
   def new(state, [size | _] = taps) when is_integer(state) and is_integer(size) do
     limit = 1 <<< size
@@ -11,10 +54,17 @@ defmodule LFSR do
     struct(__MODULE__, state: state, mask: mask(size, taps))
   end
 
-  def new(state, size) when is_integer(state) and is_integer(size) and size in 2..4096 do
-    new(state, taps(size))
-  end
+  @doc """
+  Takes the LFSR and returns the LFSR in the next state.
 
+  ## Examples
+
+      iex> LFSR.new(1, 8)
+      %LFSR{mask: 184, state: 1}
+
+      iex> LFSR.new(1, 8) |> LFSR.next
+      %LFSR{mask: 184, state: 184}
+  """
   def next(%__MODULE__{state: state, mask: mask} = lfsr) do
     lsb = state &&& 1
     state = state >>> 1
@@ -22,6 +72,14 @@ defmodule LFSR do
     %{lfsr | state: state}
   end
 
+  @doc """
+  Convenience function to fetch the state of a LFSR.
+
+  ## Examples
+
+      iex> LFSR.new(1, 8) |> LFSR.state
+      1
+  """
   def state(%__MODULE__{state: state}), do: state
 
   defp mask(size, taps) do

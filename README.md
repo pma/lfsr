@@ -2,7 +2,7 @@
 
 Elixir implementation of a binary Galois Linear Feedback Shift Register.
 
-It can be used to generate out-of-order counters, since a LFSR of size n will
+It can be used to generate out-of-order counters, since a LFSR of size n can
 generate a sequence of length 2<sup>n</sup>-1 (without repetitions).
 
 ## Usage
@@ -11,7 +11,7 @@ Add LFSR as a dependency in your `mix.exs` file.
 
 ```elixir
 def deps do
-  [{:lfsr, github: "pma/lfsr"}]
+  [{:lfsr, "~> 0.0.1"}]
 end
 ```
 

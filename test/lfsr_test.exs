@@ -24,4 +24,9 @@ defmodule LFSRTest do
     assert 46080 == LFSR.new(1, 16) |> LFSR.next |> LFSR.state
   end
 
+  test "size not in taps table" do
+    assert_raise ArgumentError, "no entry for size 900 found in the table of maximum-cycle LFSR taps", fn ->
+      LFSR.new(1, 900)
+    end
+  end
 end

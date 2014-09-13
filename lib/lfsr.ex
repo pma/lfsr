@@ -9,7 +9,7 @@ defmodule LFSR do
   A LFSR with well chosen taps will produce a maximum cycle, meaning that a register
   with size `n` will produce a sequence of length 2<sup>n</sup>-1 without repetitions.
 
-  The LFSR can be initialized by providing an starting state and the desired size of
+  The LFSR can be initialized by providing a starting state and the desired size of
   the register. In this case, a table of default taps that generate the maximum cycle
   is used.
 
@@ -38,12 +38,8 @@ defmodule LFSR do
       iex> LFSR.new(1, [8, 6, 5, 4])
       %LFSR{mask: 184, state: 1}
   """
-  def new(state, size) when is_integer(state) and is_integer(size) and (size in 2..786 or size in [1024, 2048, 4096]) do
-    new(state, taps(size))
-  end
-
   def new(state, size) when is_integer(state) and is_integer(size) do
-    raise ArgumentError, message: "no entry for size #{size} found in the table of maximum-cycle LFSR taps"
+    new(state, taps(size))
   end
 
   def new(state, [size | _] = taps) when is_integer(state) and is_integer(size) do
@@ -881,5 +877,7 @@ defmodule LFSR do
   defp taps(1024), do: [1024, 1015, 1002, 1001]
   defp taps(2048), do: [2048, 2035, 2034, 2029]
   defp taps(4096), do: [4096, 4095, 4081, 4069]
-
+  defp taps(size) do
+    raise ArgumentError, message: "no entry for size #{size} found in the table of maximum-cycle LFSR taps"
+  end
 end

@@ -1,14 +1,19 @@
 defmodule LFSR.Mixfile do
   use Mix.Project
 
+  @version "0.0.2"
+
   def project do
     [app: :lfsr,
-     version: "0.0.2",
+     version: @version,
      elixir: "~> 1.0",
-     description: description,
-     package: package,
      deps: deps,
-     docs: [readme: true, main: "README"]]
+     package: package,
+     description: description,
+     name: "LFSR",
+     docs: [extras: ["README.md"], main: "extra-readme",
+            source_ref: "v#{@version}",
+            source_url: "https://github.com/pma/lfsr"]]
   end
 
   def application do

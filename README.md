@@ -11,7 +11,7 @@ Add LFSR as a dependency in your `mix.exs` file.
 
 ```elixir
 def deps do
-  [{:lfsr, "~> 0.0.1"}]
+  [{:lfsr, "~> 0.0.2"}]
 end
 ```
 

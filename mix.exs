@@ -3,8 +3,8 @@ defmodule LFSR.Mixfile do
 
   def project do
     [app: :lfsr,
-     version: "0.0.1",
-     elixir: "~> 1.0.0",
+     version: "0.0.2",
+     elixir: "~> 1.0",
      description: description,
      package: package,
      deps: deps,
@@ -17,7 +17,7 @@ defmodule LFSR.Mixfile do
 
   defp deps do
     [{:earmark, "~> 0.1", only: :docs},
-     {:ex_doc, "~> 0.5", only: :docs}]
+     {:ex_doc, "~> 0.10", only: :docs}]
   end
 
   defp description do

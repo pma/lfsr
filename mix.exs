@@ -33,7 +33,7 @@ defmodule LFSR.Mixfile do
 
   defp package do
     [files: ["lib", "mix.exs", "README.md", "LICENSE"],
-     contributors: ["Paulo Almeida"],
+     maintainers: ["Paulo Almeida"],
      licenses: ["MIT"],
      links: %{"GitHub" => "https://github.com/pma/lfsr"}]
   end
